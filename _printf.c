@@ -66,7 +66,7 @@ int _printf(const char *format, ...)
 int format_handler(int *index, const char *format, char *buffer, int *b_index,
 		va_list list, int flag, int reset)
 {
-	int i, count = 0;
+	int i, found = 0, count = 0;
 	non_c nc_func[] = {
 		{'d', b_dformat},
 		{'i', b_dformat}
@@ -80,16 +80,22 @@ int format_handler(int *index, const char *format, char *buffer, int *b_index,
 	for (i = 0; i < 2; i++)
 	{
 		if (nc_func[i].conv_s == format[*index])
+		{
 			count += nc_func[i].conv_func(list, buffer, b_index, flag);
+			found++;
+		}
 	}
 
 	for (i = 0; i < 2; i++)
 	{
 		if (cs_func[i].conv_s == format[*index])
+		{
 			count += cs_func[i].conv_func(list, buffer, b_index, flag);
+			found++;
+		}
 	}
 
-	if (count == 0)
+	if (found == 0)
 	{
 		for (i = reset; i <= *index; i++)
 		{

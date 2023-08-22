@@ -14,6 +14,9 @@ int b_dformat(va_list list, char *buffer, int *b_index, int flag)
 {
 	int num = va_arg(list, int);
 
+	if (num == '\0')
+		return (0);
+
 	return (buffer_int(num, buffer, b_index, flag));
 }
 
@@ -69,7 +72,7 @@ int b_sformat(va_list list, char *buffer, int *b_index, int flag)
 		flag = -1;
 
 	if (s == NULL)
-		s = "(nil)";
+		s = "";
 
 	while (s[count])
 	{
@@ -97,6 +100,9 @@ int b_cformat(va_list list, char *buffer, int *b_index, int flag)
 
 	if (flag > 0)
 		flag = -1;
+
+	if (c == '\0')
+		return (0);
 
 	buffer[*b_index] = c;
 	*b_index += 1;
