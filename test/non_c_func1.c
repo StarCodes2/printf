@@ -12,7 +12,7 @@
 
 int b_dformat(va_list list, char *buffer, int *b_index, int flag)
 {
-	long num = va_arg(list, long);
+	int num = va_arg(list, int);
 
 	return (buffer_int(num, buffer, b_index, flag));
 }
@@ -27,7 +27,7 @@ int b_dformat(va_list list, char *buffer, int *b_index, int flag)
  * Return: the number of characters buffered
  */
 
-int buffer_int(long num, char *buffer, int *b_index, int flag)
+int buffer_int(int num, char *buffer, int *b_index, int flag)
 {
 	int count = 0;
 
@@ -93,7 +93,7 @@ int b_sformat(va_list list, char *buffer, int *b_index, int flag)
 
 int b_cformat(va_list list, char *buffer, int *b_index, int flag)
 {
-	char c = (char)va_arg(list, int);
+	unsigned char c = va_arg(list, int);
 
 	if (flag > 0)
 		flag = -1;

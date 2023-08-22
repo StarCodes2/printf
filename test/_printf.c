@@ -15,33 +15,37 @@ int _printf(const char *format, ...)
 	int i, reset, flag, b_index = 0, char_printed = 0;
 	char buffer[BUFFER_SIZE];
 
-	if (format == NULL)
+	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
 		return (-1);
 
 	va_start(list, format);
 	for (i = 0; format[i]; i++)
 	{
-		if (((format[i - 1] == '%') && (format[i] == '%')) || format[i] != '%')
+		if (format[i] != '%')
 		{
-			buffer[b_index] = format[i];
-			b_index++;
+			buffer[b_index++] = format[i];
 			char_printed++;
-
-			if (b_index == BUFFER_SIZE)
-				p_buffer(buffer, &b_index);
 		}
 		else
 		{
 			if (format[i + 1] == '%')
+			{
+				buffer[b_index++] = format[i++];
+				char_printed++;
 				continue;
+			}
+			reset = i++;
 
-			reset = i;
-			i++;
+			if (format[i] == ' ')
+				return (-1);
 			p_buffer(buffer, &b_index);
 			flag = -1; /* get_flag(&i, format); */
 			char_printed += format_handler(&i, format, buffer,
 					&b_index, list, flag, reset);
 		}
+
+		if (b_index == BUFFER_SIZE)
+			p_buffer(buffer, &b_index);
 	}
 	p_buffer(buffer, &b_index);
 	va_end(list);
