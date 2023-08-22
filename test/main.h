@@ -10,7 +10,7 @@ void p_buffer(char *buffer, int *index);
 int format_handler(int *index, const char *format, char *buffer, int *b_index,
 		va_list list, int flag, int reset);
 int b_dformat(va_list list, char *buffer, int *b_index, int flag);
-int buffer_int(int num, char *buffer, int *b_index, int flag);
+int buffer_int(long num, char *buffer, int *b_index, int flag);
 int b_sformat(va_list list, char *buffer, int *b_index, int flag);
 int b_cformat(va_list list, char *buffer, int *b_index, int flag);
 
