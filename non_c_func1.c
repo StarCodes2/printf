@@ -45,6 +45,9 @@ int buffer_int(int num, char *buffer, int *b_index, int flag)
 	if (num > 9)
 		count += buffer_int(num / 10, buffer, b_index, flag);
 
+	if (*b_index == BUFFER_SIZE)
+		p_buffer(buffer, b_index);
+
 	buffer[*b_index] = (num % 10) + '0';
 	*b_index += 1;
 
@@ -73,6 +76,9 @@ int b_sformat(va_list list, char *buffer, int *b_index, int flag)
 
 	while (s[count])
 	{
+		if (*b_index == BUFFER_SIZE)
+			p_buffer(buffer, b_index);
+
 		buffer[*b_index] = s[count];
 		*b_index += 1;
 		count++;
@@ -97,6 +103,9 @@ int b_cformat(va_list list, char *buffer, int *b_index, int flag)
 
 	if (flag > 0)
 		flag = -1;
+
+	if (*b_index == BUFFER_SIZE)
+		p_buffer(buffer, b_index);
 
 	buffer[*b_index] = c;
 	*b_index += 1;

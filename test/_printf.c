@@ -9,8 +9,6 @@
 
 int _printf(const char *format, ...)
 {
-#define BUFFER_SIZE 1024
-
 	va_list list;
 	int i, reset, flag, b_index = 0, char_printed = 0;
 	char buffer[BUFFER_SIZE];
@@ -21,6 +19,9 @@ int _printf(const char *format, ...)
 	va_start(list, format);
 	for (i = 0; format[i]; i++)
 	{
+		if (b_index == BUFFER_SIZE)
+			p_buffer(buffer, &b_index);
+
 		if (format[i] != '%')
 		{
 			buffer[b_index++] = format[i];
@@ -36,20 +37,15 @@ int _printf(const char *format, ...)
 			}
 			reset = i++;
 
-			if (format[i] == ' ')
+			if (format[i] == ' ' || format[i] == '\0')
 				return (-1);
-			p_buffer(buffer, &b_index);
 			flag = -1; /* get_flag(&i, format); */
 			char_printed += format_handler(&i, format, buffer,
 					&b_index, list, flag, reset);
 		}
-
-		if (b_index == BUFFER_SIZE)
-			p_buffer(buffer, &b_index);
 	}
 	p_buffer(buffer, &b_index);
 	va_end(list);
-
 	return (char_printed);
 }
 
@@ -70,7 +66,7 @@ int _printf(const char *format, ...)
 int format_handler(int *index, const char *format, char *buffer, int *b_index,
 		va_list list, int flag, int reset)
 {
-	int i, found = 0, count = 0;
+	int i, count = 0, found = 0;
 	non_c nc_func[] = {
 		{'d', b_dformat},
 		{'i', b_dformat}
@@ -86,7 +82,7 @@ int format_handler(int *index, const char *format, char *buffer, int *b_index,
 		if (nc_func[i].conv_s == format[*index])
 		{
 			count += nc_func[i].conv_func(list, buffer, b_index, flag);
-			found++;
+			found = 1;
 		}
 	}
 
@@ -95,7 +91,7 @@ int format_handler(int *index, const char *format, char *buffer, int *b_index,
 		if (cs_func[i].conv_s == format[*index])
 		{
 			count += cs_func[i].conv_func(list, buffer, b_index, flag);
-			found++;
+			found = 1;
 		}
 	}
 

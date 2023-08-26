@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <stdarg.h>
 
+#define BUFFER_SIZE 1024
+
 int _printf(const char *format, ...);
 void p_buffer(char *buffer, int *index);
 int format_handler(int *index, const char *format, char *buffer, int *b_index,
